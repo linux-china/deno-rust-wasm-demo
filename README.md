@@ -1,5 +1,5 @@
-Deno Rust WebAssembly开发指南
-=========================
+Deno Rust WebAssembly开发项目模板
+===========================
 
 这个项目是知道如何使用Rust为Deno开发WebAssembly，而且方便发布。 项目的模板来自 https://github.com/denosaurs/wasabi/generate
 
