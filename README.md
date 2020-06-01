@@ -15,3 +15,7 @@ Deno Rust WebAssembly开发项目模板
 - [rust](https://www.rust-lang.org/)
 - [wasm-pack](https://rustwasm.github.io/wasm-pack/)
 - [just](https://github.com/casey/just)
+
+## IDE support
+
+建议使用Clion打开该项目，同时安装Deno plugin。
