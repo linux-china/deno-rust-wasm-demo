@@ -13,3 +13,14 @@ pub fn add(a: i32, b: i32) -> i32 {
 pub fn hello(name: String) -> String {
     return format!("hello {}", name);
 }
+
+
+#[test]
+fn test_add() {
+    println!("{}", add(1_i32, 2_i32));
+}
+
+#[test]
+fn test_hello() {
+    println!("{}", hello("Jackie".into()));
+}
