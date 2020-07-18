@@ -1,5 +1,5 @@
-import { encode } from "https://deno.land/std@0.56.0/encoding/base64.ts";
-import { compress } from "https://deno.land/x/lz4@v0.1.1/mod.ts";
+import { encode } from "https://deno.land/std@0.61.0/encoding/base64.ts";
+import { compress } from "https://deno.land/x/lz4@v0.1.2/mod.ts";
 import Terser from "https://cdn.pika.dev/terser@^4.7.0";
 
 const name = "wasabi";
@@ -66,7 +66,7 @@ log(
 );
 
 log("inlining wasm in js");
-const source = `import * as lz4 from "https://deno.land/x/lz4@v0.1.1/mod.ts";
+const source = `import * as lz4 from "https://deno.land/x/lz4@v0.1.2/mod.ts";
                 export const source = lz4.decompress(Uint8Array.from(atob("${encoded}"), c => c.charCodeAt(0)));`;
 
 const init = await Deno.readTextFile(`pkg/${name}.js`);
