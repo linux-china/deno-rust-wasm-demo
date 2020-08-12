@@ -1,6 +1,6 @@
-import { encode } from "https://deno.land/std@0.61.0/encoding/base64.ts";
-import { compress } from "https://deno.land/x/lz4@v0.1.2/mod.ts";
-import Terser from "https://cdn.pika.dev/terser@^4.7.0";
+import {encode} from "https://deno.land/std@0.64.0/encoding/base64.ts";
+import {compress} from "https://deno.land/x/lz4@v0.1.2/mod.ts";
+import Terser from "https://jspm.dev/terser@4.8.0";
 
 const name = "wasabi";
 
@@ -26,7 +26,7 @@ async function requires(...executables: string[]) {
 async function run(msg: string, cmd: string[]) {
     log(msg);
 
-    const process = Deno.run({ cmd });
+    const process = Deno.run({cmd});
 
     if (!(await process.status()).success) {
         err(`${msg} failed`);
@@ -73,7 +73,7 @@ const init = await Deno.readTextFile(`pkg/${name}.js`);
 
 log("minifying js");
 const output = Terser.minify(`${source}\n${init}`, {
-    mangle: { module: true },
+    mangle: {module: true},
     output: {
         preamble: "//deno-fmt-ignore-file",
     },
