@@ -10,7 +10,7 @@ publish = false
 crate-type = ["cdylib"]
 
 [dependencies]
-wasm-bindgen = "0.2.64"
+wasm-bindgen = "0.2.67"
 wee_alloc = { version = "0.4.5", optional = true }
 
 [profile.release]
@@ -19,3 +19,6 @@ opt-level = "z"
 
 [features]
 default = ["wee_alloc"]
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
