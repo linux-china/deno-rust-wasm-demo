@@ -1,6 +1,6 @@
-import {encode} from "https://deno.land/std@0.69.0/encoding/base64.ts";
+import {encode} from "https://deno.land/std@0.100.0/encoding/base64.ts";
 import {compress} from "https://deno.land/x/brotli@v0.1.4/mod.ts";
-import {minify} from "https://jspm.dev/terser@5.3.1";
+import {minify} from "https://jspm.dev/terser@5.7.1";
 
 const name = "wasabi";
 
