@@ -1,6 +1,6 @@
-import {encode} from "https://deno.land/std@0.100.0/encoding/base64.ts";
+import {encode} from "https://deno.land/std@0.110.0/encoding/base64.ts";
 import {compress} from "https://deno.land/x/brotli@v0.1.4/mod.ts";
-import {minify} from "https://jspm.dev/terser@5.7.1";
+import {minify} from "https://jspm.dev/terser@5.9.0";
 
 const name = "deno_rust_wasm_demo";
 
@@ -56,7 +56,7 @@ await run(
 const wasm = await Deno.readFile(`pkg/${name}_bg.wasm`);
 const compressed = compress(wasm);
 log(
-    `compressed wasm using lz4, size reduction: ${wasm.length -
+    `compressed wasm using br, size reduction: ${wasm.length -
     compressed.length} bytes`,
 );
 const encoded = encode(compressed);
