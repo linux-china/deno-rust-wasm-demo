@@ -3,23 +3,21 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::JsFuture;
 use web_sys::{Request, RequestInit, RequestMode, Response};
-use boa::{Context, JsValue as BoaJsValue, object::JsObject as BoaJsObject};
+use boa::{Context, JsValue as BoaJsValue};
 
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 static mut BOA: Option<Context> = None;
 static mut JS_HELLO_FN: Option<BoaJsValue> = None;
-static mut HELLO: &str = "hello";
 
 #[export_name = "wizer.initialize"]
 pub extern "C" fn init() {
     unsafe {
-        HELLO = "HELLO";
         let mut context = Context::new();
         let js_code = "function hello() {return 'hello' ;} hello;";
         let result = context.eval(js_code).unwrap();
-        JS_HELLO_FN = Some(result.unwrap());
+        JS_HELLO_FN = Some(result);
         BOA = Some(context);
     }
 }
@@ -31,9 +29,7 @@ pub fn add(a: i32, b: i32) -> i32 {
 
 #[wasm_bindgen]
 pub fn hello(name: String) -> String {
-    unsafe {
-        return format!("{} {}", HELLO, name);
-    }
+    return format!("Hello {}", name);
 }
 
 #[wasm_bindgen]
