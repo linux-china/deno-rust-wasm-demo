@@ -4,12 +4,13 @@ use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::JsFuture;
 use web_sys::{Request, RequestInit, RequestMode, Response};
 use boa::{Context, JsValue as BoaJsValue};
+use once_cell::sync::OnceCell;
 
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-static mut BOA: Option<Context> = None;
+static mut CONTEXT: OnceCell<Context> = OnceCell::new();
 static mut JS_HELLO_FN: Option<BoaJsValue> = None;
 
 #[export_name = "wizer.initialize"]
@@ -18,14 +19,14 @@ pub extern "C" fn init() {
         let mut context = Context::new();
         let js_code = "function hello() {return 'hello' ;} hello;";
         JS_HELLO_FN = context.eval(js_code).ok();
-        BOA = Some(context);
+        CONTEXT.set(context).unwrap();
     }
 }
 
 #[wasm_bindgen]
 pub fn hello_boa(name: String) -> String {
     unsafe {
-        let mut ctx = BOA.as_mut().unwrap();
+        let mut ctx = CONTEXT.get_mut().unwrap();
         let handler = JS_HELLO_FN.as_ref().unwrap();
         let result = handler.as_object().unwrap().call(handler, &vec![], &mut ctx).unwrap();
         format!("{} {} from Boa", result.as_string().unwrap().to_string(), name)
