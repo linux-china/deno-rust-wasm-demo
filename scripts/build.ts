@@ -53,7 +53,12 @@ await run(
     ["wasm-pack", "build", "--target", "web", "--release"],
 );
 
-const wasm = await Deno.readFile(`pkg/${name}_bg.wasm`);
+await run(
+    "wizer initialize",
+    ["wizer", `pkg/${name}_bg.wasm`, "-o", `pkg/${name}_wizer.wasm`],
+);
+
+const wasm = await Deno.readFile(`pkg/${name}_wizer.wasm`);
 const compressed = compress(wasm);
 log(
     `compressed wasm using br, size reduction: ${wasm.length -
