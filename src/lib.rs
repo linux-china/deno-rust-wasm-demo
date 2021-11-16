@@ -8,6 +8,7 @@ use boa::{Context, JsValue as BoaJsValue};
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
 static mut BOA: Option<Context> = None;
 static mut JS_HELLO_FN: Option<BoaJsValue> = None;
 
@@ -22,16 +23,6 @@ pub extern "C" fn init() {
 }
 
 #[wasm_bindgen]
-pub fn add(a: i32, b: i32) -> i32 {
-    return a + b;
-}
-
-#[wasm_bindgen]
-pub fn hello(name: String) -> String {
-    return format!("Hello {}", name);
-}
-
-#[wasm_bindgen]
 pub fn hello_boa(name: String) -> String {
     unsafe {
         let mut ctx = BOA.as_mut().unwrap();
@@ -39,6 +30,16 @@ pub fn hello_boa(name: String) -> String {
         let result = handler.as_object().unwrap().call(handler, &vec![], &mut ctx).unwrap();
         format!("{} {} from Boa", result.as_string().unwrap().to_string(), name)
     }
+}
+
+#[wasm_bindgen]
+pub fn add(a: i32, b: i32) -> i32 {
+    return a + b;
+}
+
+#[wasm_bindgen]
+pub fn hello(name: String) -> String {
+    return format!("Hello {}", name);
 }
 
 #[derive(Debug, Serialize, Deserialize)]
