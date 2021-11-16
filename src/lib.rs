@@ -7,6 +7,14 @@ use web_sys::{Request, RequestInit, RequestMode, Response};
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+static mut HELLO: &str = "hello";
+
+#[export_name = "wizer.initialize"]
+pub extern "C" fn init() {
+    unsafe {
+        HELLO = "HELLO";
+    }
+}
 
 #[wasm_bindgen]
 pub fn add(a: i32, b: i32) -> i32 {
@@ -15,7 +23,9 @@ pub fn add(a: i32, b: i32) -> i32 {
 
 #[wasm_bindgen]
 pub fn hello(name: String) -> String {
-    return format!("hello {}", name);
+    unsafe {
+        return format!("{} {}", HELLO, name);
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
