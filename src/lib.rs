@@ -16,8 +16,7 @@ pub extern "C" fn init() {
     unsafe {
         let mut context = Context::new();
         let js_code = "function hello() {return 'hello' ;} hello;";
-        let result = context.eval(js_code).unwrap();
-        JS_HELLO_FN = Some(result);
+        JS_HELLO_FN = context.eval(js_code).ok();
         BOA = Some(context);
     }
 }
