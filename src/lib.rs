@@ -1,3 +1,4 @@
+use std::sync::Mutex;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
@@ -10,7 +11,7 @@ use once_cell::sync::OnceCell;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-static mut CONTEXT: OnceCell<Context> = OnceCell::new();
+static mut CONTEXT: OnceCell<Mutex<Context>> = OnceCell::new();
 static mut JS_HELLO_FN: Option<BoaJsValue> = None;
 
 #[export_name = "wizer.initialize"]
@@ -19,14 +20,14 @@ pub extern "C" fn init() {
         let mut context = Context::new();
         let js_code = "function hello() {return 'hello' ;} hello;";
         JS_HELLO_FN = context.eval(js_code).ok();
-        CONTEXT.set(context).unwrap();
+        CONTEXT.set(Mutex::new(context)).unwrap();
     }
 }
 
 #[wasm_bindgen]
 pub fn hello_boa(name: String) -> String {
     unsafe {
-        let mut ctx = CONTEXT.get_mut().unwrap();
+        let mut ctx = CONTEXT.get().unwrap().lock().unwrap();
         let handler = JS_HELLO_FN.as_ref().unwrap();
         let result = handler.as_object().unwrap().call(handler, &vec![], &mut ctx).unwrap();
         format!("{} {} from Boa", result.as_string().unwrap().to_string(), name)
