@@ -93,9 +93,14 @@ const reduction = new Blob([(`${source}${init}`)]).size -
 log(`minified js, size reduction: ${reduction} bytes`);
 
 log(`writing output to file ("wasm.js")`);
-await Deno.writeFile("wasm.js", encoder.encode(output.code));
+await Deno.writeFile("./pkg/wasm.js", encoder.encode(output.code));
 
-const outputFile = await Deno.stat("wasm.js");
+await run(
+    "Bundle",
+    ["deno", "bundle", "pkg/wasm.js", "wasm-bundle.js"],
+);
+
+const outputFile = await Deno.stat("wasm-bundle.js");
 log(
-    `output file ("wasm.js"), final size is: ${outputFile.size} bytes`,
+    `output file ("wasm-bundle.js"), final size is: ${outputFile.size} bytes`,
 );
