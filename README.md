@@ -11,10 +11,18 @@ Deno Rust WebAssembly开发项目模板
 
 # Deno and WebAssembly
 
-* web-sys: fetch
+* web-sys: fetch overload by fetch_with_*() - https://rustwasm.github.io/docs/wasm-bindgen/web-sys/function-overloads.html
 * web-sys: WebSocket
+* Crypto
+* LocalStorage
+* WebGPU: https://www.w3.org/TR/webgpu/
+* Intl: 国际化 
+* BroadcastChannel
+* addEventListener() and dispatchEvent()
 * Promises and Futures
 * Reference Types
+
+关于Windows对象的属性，请参考 https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.Window.html 
 
 # Prerequisites
 
