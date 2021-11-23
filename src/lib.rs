@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::JsFuture;
-use web_sys::{Request, RequestInit, RequestMode, Response};
+use web_sys::{Request, RequestInit, RequestMode, Response, Window};
 use boa::{Context, JsValue as BoaJsValue};
 use once_cell::sync::OnceCell;
 
@@ -22,6 +22,11 @@ pub extern "C" fn init() {
         JS_HELLO_FN = context.eval(js_code).ok();
         CONTEXT.set(Mutex::new(context)).unwrap();
     }
+}
+
+#[wasm_bindgen(inline_js = "export function send_event(type_name) { dispatchEvent(new Event(type_name)); }")]
+extern "C" {
+    fn send_event(type_name: &str);
 }
 
 #[wasm_bindgen]
@@ -56,7 +61,7 @@ pub async fn fetch_ip() -> Result<JsValue, JsValue> {
     opts.mode(RequestMode::Cors);
     let url = format!("https://httpbin.org/ip");
     let request = Request::new_with_str_and_init(&url, &opts)?;
-    let window = web_sys::window().unwrap();
+    let window: Window = web_sys::window().unwrap();
     let resp_value = JsFuture::from(window.fetch_with_request(&request)).await?;
     // `resp_value` is a `Response` object.
     assert!(resp_value.is_instance_of::<Response>());
@@ -66,6 +71,7 @@ pub async fn fetch_ip() -> Result<JsValue, JsValue> {
     let json = JsFuture::from(resp.json()?).await?;
     // Use serde to parse the JSON into a struct.
     let ip_info: Ip = json.into_serde().unwrap();
+    send_event("demo");
     // Send the `IP` struct back to JS as an `Object`.
     Ok(JsValue::from_serde(&ip_info).unwrap())
 }
