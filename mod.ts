@@ -4,7 +4,7 @@ import init, {
     hello as wasm_hello,
     hello_boa,
     fetch_ip
-} from "./wasm.js";
+} from "./wasm-bundle.js";
 
 await init(source);
 
