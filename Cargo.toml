@@ -35,6 +35,11 @@ features = [
     "MessageEvent",
     "ProgressEvent",
     "WebSocket",
+    "Crypto",
+    "CryptoKey",
+    "CryptoKeyPair",
+    "Event",
+    "EventTarget"
 ]
 
 [profile.release]
