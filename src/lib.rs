@@ -45,7 +45,7 @@ pub fn add(a: i32, b: i32) -> i32 {
 }
 
 #[wasm_bindgen]
-pub fn hello(name: String) -> String {
+pub fn hello(name: &str) -> String {
     return format!("Hello {}", name);
 }
 
