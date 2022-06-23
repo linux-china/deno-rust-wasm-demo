@@ -4,7 +4,7 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::JsFuture;
 use web_sys::{Request, RequestInit, RequestMode, Response, Window};
-use boa::{Context, JsValue as BoaJsValue};
+use boa_engine::{Context, JsValue as BoaJsValue};
 use once_cell::sync::OnceCell;
 
 #[cfg(feature = "wee_alloc")]
@@ -46,6 +46,7 @@ pub fn add(a: i32, b: i32) -> i32 {
 
 #[wasm_bindgen]
 pub fn hello(name: &str) -> String {
+    send_event("demo");
     return format!("Hello {}", name);
 }
 
@@ -58,20 +59,14 @@ pub struct Ip {
 pub async fn fetch_ip() -> Result<JsValue, JsValue> {
     let mut opts = RequestInit::new();
     opts.method("GET");
-    opts.mode(RequestMode::Cors);
     let url = format!("https://httpbin.org/ip");
     let request = Request::new_with_str_and_init(&url, &opts)?;
     let window: Window = web_sys::window().unwrap();
     let resp_value = JsFuture::from(window.fetch_with_request(&request)).await?;
-    // `resp_value` is a `Response` object.
-    assert!(resp_value.is_instance_of::<Response>());
     let resp: Response = resp_value.dyn_into().unwrap();
-
-    // Convert this other `Promise` into a rust `Future`.
     let json = JsFuture::from(resp.json()?).await?;
     // Use serde to parse the JSON into a struct.
     let ip_info: Ip = json.into_serde().unwrap();
-    send_event("demo");
     // Send the `IP` struct back to JS as an `Object`.
     Ok(JsValue::from_serde(&ip_info).unwrap())
 }
