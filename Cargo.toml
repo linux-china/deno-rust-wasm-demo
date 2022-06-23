@@ -10,17 +10,17 @@ publish = false
 crate-type = ["cdylib"]
 
 [dependencies]
-wasm-bindgen = { version = "0.2.78", features = ["serde-serialize"] }
-js-sys = "0.3.55"
-wasm-bindgen-futures = "0.4.28"
+wasm-bindgen = { version = "0.2.81", features = ["serde-serialize"] }
+js-sys = "0.3.58"
+wasm-bindgen-futures = "0.4.31"
 serde = { version = "1.0", features = ["derive"] }
 serde_derive = "1.0"
-Boa = "0.13.0"
-once_cell = "1.8.0"
+boa_engine = "0.15.0"
+once_cell = "1.12.0"
 wee_alloc = { version = "0.4.5", optional = true }
 
 [dependencies.web-sys]
-version = "0.3.55"
+version = "0.3.58"
 features = [
     'Headers',
     'Request',
