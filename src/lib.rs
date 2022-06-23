@@ -17,7 +17,7 @@ static mut JS_HELLO_FN: Option<BoaJsValue> = None;
 #[export_name = "wizer.initialize"]
 pub extern "C" fn init() {
     unsafe {
-        let mut context = Context::new();
+        let mut context =Context::default();
         let js_code = "function hello() {return 'hello' ;} hello;";
         JS_HELLO_FN = context.eval(js_code).ok();
         CONTEXT.set(Mutex::new(context)).unwrap();
